@@ -12,6 +12,7 @@ frontend/.env*
 backend/.env*
 !frontend/.env.example
 !backend/.env.example
+RigCheck_Final_Product_and_Technical_Documentation_v1.0.docm
 
 # Build output
 frontend/dist/
