@@ -9,7 +9,8 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "seed:games": "node scripts/seedGames.js"
   },
   "dependencies": {
     "cors": "^2.8.6",

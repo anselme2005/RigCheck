@@ -8,6 +8,7 @@ import { env } from "./config/env.js";
 import healthRoutes from "./routes/health.routes.js";
 import { notFoundHandler } from "./middleware/notFound.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import gameRoutes from "./routes/game.routes.js";
 
 const app = express();
 
@@ -77,6 +78,7 @@ app.get("/", (req, res) => {
  * Future feature routes will be mounted here as they are implemented.
  */
 app.use(`/api/${env.apiVersion}/health`, healthRoutes);
+app.use(`/api/${env.apiVersion}/games`, gameRoutes);
 
 /**
  * Middleware order matters:

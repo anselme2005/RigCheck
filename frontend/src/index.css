@@ -1,8 +1,3 @@
-/* =========================================================
-   RIGCHECK DESIGN SYSTEM
-   Hardware Lab — calm, precise, approachable and technical.
-   ========================================================= */
-
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 /* Shared design tokens. Keep colors and spacing consistent
@@ -113,9 +108,7 @@ svg {
   padding-block: 84px;
 }
 
-/* =========================================================
-   HEADER AND BRAND
-   ========================================================= */
+/* HEADER AND BRAND */
 
 .site-header {
   position: sticky;
@@ -143,10 +136,11 @@ svg {
 
 .brand-mark {
   position: relative;
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 38px;
   height: 38px;
-  place-items: center;
   border: 1.5px solid var(--color-blue);
   border-radius: 10px;
   background: #f3f7fd;
@@ -157,10 +151,11 @@ svg {
   position: absolute;
   right: -4px;
   bottom: -4px;
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 16px;
   height: 16px;
-  place-items: center;
   border: 2px solid white;
   border-radius: 50%;
   background: var(--color-blue);
@@ -230,9 +225,7 @@ svg {
   display: none;
 }
 
-/* =========================================================
-   REUSABLE BUTTONS AND LABELS
-   ========================================================= */
+/* REUSABLE BUTTONS AND LABELS */
 
 .button {
   display: inline-flex;
@@ -297,33 +290,38 @@ svg {
   background: var(--color-blue);
 }
 
-/* =========================================================
-   HERO
-   ========================================================= */
+/* HERO */
 
 .hero-section {
   overflow: hidden;
   border-bottom: 1px solid var(--color-border);
   background:
-    linear-gradient(90deg, transparent 49.9%, rgb(216 222 230 / 35%) 50%, transparent 50.1%),
+    linear-gradient(
+      90deg,
+      transparent 49.9%,
+      rgb(216 222 230 / 35%) 50%,
+      transparent 50.1%
+    ),
     #f7f9fb;
 }
 
 .hero-layout {
-  display: grid;
-  min-height: 540px;
-  grid-template-columns: minmax(0, 1.12fr) minmax(350px, 0.88fr);
+  display: flex;
   align-items: center;
-  gap: 76px;
-  padding-block: 76px;
+  justify-content: space-between;
+  gap: 56px;
+  min-height: 0;
+  padding-block: 42px 56px;
 }
 
 .hero-copy {
-  max-width: 610px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 660px;
 }
 
 .hero-copy h1 {
-  margin: 23px 0 20px;
+  margin: 20px 0 20px;
   color: var(--color-slate);
   font-size: clamp(38px, 4.2vw, 56px);
   font-weight: 800;
@@ -347,14 +345,14 @@ svg {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 29px;
+  margin-top: 25px;
 }
 
 .hero-trust-row {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  margin-top: 29px;
+  margin-top: 25px;
 }
 
 .hero-trust-row span {
@@ -380,6 +378,201 @@ svg {
   box-shadow: 0 12px 36px rgb(32 42 54 / 5%);
 }
 
+/* Detect section */
+
+.detect-section {
+  display: flex;
+  flex: 0 1 48%;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+.detect-content {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.detect-content h2 {
+  max-width: 620px;
+  margin: 0 0 20px;
+  color: var(--color-slate);
+  font-size: clamp(30px, 3.5vw, 44px);
+  font-weight: 750;
+  letter-spacing: -1.8px;
+  line-height: 1.18;
+}
+
+.detect-content > p:not(.detect-note) {
+  max-width: 600px;
+  margin: 0;
+  color: var(--color-gray);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.detect-benefits {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 18px 0 22px;
+  padding: 0;
+  list-style: none;
+}
+
+.detect-benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--color-slate);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.detect-content .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--color-blue);
+  border-radius: var(--radius-sm);
+  background: var(--color-blue);
+  color: white;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.detect-content .button:hover {
+  border-color: var(--color-blue-dark);
+  background: var(--color-blue-dark);
+}
+
+.detect-note {
+  margin: 12px 0 0;
+  color: var(--color-gray);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.detect-preview {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: white;
+  box-shadow: var(--shadow-card);
+}
+
+.detect-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+}
+
+.detect-preview-icon {
+  display: flex;
+  flex: 0 0 44px;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #c8daf3;
+  border-radius: 9px;
+  background: #eaf2fd;
+  color: var(--color-blue);
+  font-size: 21px;
+}
+
+.detect-preview-header > div:nth-child(2) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.detect-preview-header strong {
+  color: var(--color-slate);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.detect-preview-header > div:nth-child(2) span {
+  color: var(--color-gray);
+  font-size: 11px;
+}
+
+.preview-badge {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 5px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  background: var(--color-mist);
+  color: var(--color-gray);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.detect-spec-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 14px 0;
+  border-top: 1px solid #e8edf2;
+}
+
+.detect-spec-row > span {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-gray);
+  font-size: 12px;
+}
+
+.detect-spec-row > strong {
+  flex: 0 1 55%;
+  min-width: 0;
+  color: var(--color-slate);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.detect-preview-footer {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 13px;
+  border-radius: 7px;
+  background: var(--color-mist);
+  color: #475569;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.detect-preview-check {
+  flex-shrink: 0;
+  color: #166534;
+  font-weight: 700;
+}
+
 .panel-header {
   display: flex;
   align-items: center;
@@ -402,11 +595,12 @@ svg {
 }
 
 .panel-icon {
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 43px;
   height: 43px;
   flex-shrink: 0;
-  place-items: center;
   border: 1px solid #d4e3f8;
   border-radius: 12px;
   background: #eff5fd;
@@ -428,11 +622,12 @@ svg {
 }
 
 .hardware-icon {
-  display: grid;
+  display: flex;
   width: 40px;
   height: 40px;
   flex-shrink: 0;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
   border-radius: 10px;
   background: #f3f6fa;
   color: #526276;
@@ -474,11 +669,12 @@ svg {
 }
 
 .panel-note-mark {
-  display: grid;
+  display: flex;
   width: 17px;
   height: 17px;
   flex-shrink: 0;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
   border: 1px solid #a7c7f1;
   border-radius: 50%;
   color: var(--color-blue);
@@ -508,9 +704,7 @@ svg {
   color: var(--color-blue-dark);
 }
 
-/* =========================================================
-   GAME DISCOVERY AND SEARCH
-   ========================================================= */
+/* GAME DISCOVERY AND SEARCH */
 
 .discovery-section {
   background: white;
@@ -645,7 +839,9 @@ svg {
 }
 
 .game-grid {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
 }
@@ -888,9 +1084,7 @@ svg {
   line-height: 1.8;
 }
 
-/* =========================================================
-   HOW IT WORKS
-   ========================================================= */
+/* HOW IT WORKS */
 
 .how-section {
   border-top: 1px solid var(--color-border);
@@ -915,8 +1109,8 @@ svg {
 }
 
 .steps-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: nowrap;
   gap: 18px;
 }
 
@@ -964,9 +1158,7 @@ svg {
   line-height: 1.9;
 }
 
-/* =========================================================
-   PC BUILDER INTRODUCTION
-   ========================================================= */
+/* PC BUILDER INTRODUCTION */
 
 .builder-section {
   padding-top: 0;
@@ -1093,9 +1285,7 @@ svg {
   background: #dce8f8;
 }
 
-/* =========================================================
-   GAME DETAIL AND SIMPLE PAGES
-   ========================================================= */
+/* GAME DETAIL AND SIMPLE PAGES */
 
 .game-detail-page {
   min-height: 75vh;
@@ -1362,9 +1552,7 @@ svg {
   margin-top: 23px;
 }
 
-/* =========================================================
-   FOOTER
-   ========================================================= */
+/* FOOTER */
 
 .site-footer {
   border-top: 1px solid var(--color-border);
@@ -1404,9 +1592,7 @@ svg {
   font-size: 10px;
 }
 
-/* =========================================================
-   RESPONSIVE LAYOUTS
-   ========================================================= */
+/* RESPONSIVE LAYOUTS */
 
 @media (max-width: 1020px) {
   .main-nav {
@@ -1766,245 +1952,6 @@ svg {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-
-
-/* =========================================
-   DETECT MY PC — VERTICAL LAYOUT
-   ========================================= */
-
-.detect-section {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 32px;
-
-  width: 100%;
-  padding: 64px 0;
-  border-top: 1px solid #d8dee6;
-}
-
-/* Intro content spans the available width */
-.detect-content {
-  width: 100%;
-  max-width: 760px;
-  margin: 0;
-}
-
-.section-eyebrow {
-  display: inline-block;
-  margin-bottom: 16px;
-
-  color: #3478d4;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.detect-content h2 {
-  max-width: 680px;
-  margin: 0 0 16px;
-
-  color: #202a36;
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.04em;
-}
-
-.detect-content > p:not(.detect-note) {
-  max-width: 680px;
-  margin: 0;
-
-  color: #64748b;
-  font-size: 0.96rem;
-  line-height: 1.8;
-}
-
-/* Benefits remain in a vertical list */
-.detect-benefits {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-
-  margin: 22px 0 26px;
-  padding: 0;
-  list-style: none;
-}
-
-.detect-benefits li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-
-  color: #202a36;
-  font-size: 0.9rem;
-  line-height: 1.6;
-}
-
-/* Primary action */
-.detect-content .button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 11px;
-
-  min-height: 48px;
-  padding: 0 22px;
-
-  border: 1px solid #3478d4;
-  border-radius: 8px;
-  background: #3478d4;
-  color: #ffffff;
-
-  font-family: inherit;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-
-  transition: background-color 160ms ease;
-}
-
-.detect-content .button:hover {
-  border-color: #2864b4;
-  background: #2864b4;
-}
-
-.detect-content .button:focus-visible {
-  outline: 3px solid #a9c9f5;
-  outline-offset: 3px;
-}
-
-.detect-note {
-  margin: 12px 0 0;
-  color: #64748b;
-  font-size: 0.78rem;
-  line-height: 1.6;
-}
-
-/* Hardware preview fills the available width */
-.detect-preview {
-  display: block;
-  width: 100%;
-  max-width: 760px;
-  min-width: 0;
-  box-sizing: border-box;
-  padding: 24px;
-
-  border: 1px solid #d8dee6;
-  border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 4px 18px rgb(32 42 54 / 4%);
-}
-
-/* Preview header */
-.detect-preview-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  padding-bottom: 20px;
-}
-
-.detect-preview-icon {
-  display: grid;
-  flex: 0 0 44px;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-
-  border: 1px solid #c8daf3;
-  border-radius: 9px;
-  background: #eaf2fd;
-  color: #3478d4;
-  font-size: 1.35rem;
-}
-
-.detect-preview-header > div:nth-child(2) {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.detect-preview-header strong {
-  color: #202a36;
-  font-size: 0.92rem;
-  font-weight: 650;
-}
-
-.detect-preview-header > div:nth-child(2) span {
-  color: #64748b;
-  font-size: 0.8rem;
-}
-
-.preview-badge {
-  flex-shrink: 0;
-  margin-left: auto;
-  padding: 5px 8px;
-
-  border: 1px solid #d8dee6;
-  border-radius: 5px;
-  background: #f3f5f7;
-  color: #64748b;
-  font-size: 0.67rem;
-  font-weight: 700;
-}
-
-/* Each specification gets its own full-width row */
-.detect-spec-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-
-  width: 100%;
-  box-sizing: border-box;
-  padding: 16px 0;
-  border-top: 1px solid #e8edf2;
-}
-
-.detect-spec-row > span {
-  flex: 1;
-  min-width: 0;
-  color: #64748b;
-  font-size: 0.86rem;
-}
-
-.detect-spec-row > strong {
-  flex: 0 1 auto;
-  max-width: 60%;
-  color: #202a36;
-  font-size: 0.82rem;
-  font-weight: 600;
-  text-align: right;
-  overflow-wrap: anywhere;
-}
-
-/* Preview footer */
-.detect-preview-footer {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-
-  margin-top: 12px;
-  padding: 14px;
-
-  border-radius: 7px;
-  background: #f3f5f7;
-  color: #475569;
-  font-size: 0.8rem;
-  line-height: 1.6;
-}
-
-.detect-preview-check {
-  flex-shrink: 0;
-  color: #166534;
-  font-weight: 700;
 }
 
 /* Mobile adjustments */

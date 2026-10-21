@@ -2,20 +2,17 @@
 /**
  * Shared API client for browser-side requests.
  *
- * Keeping the base URL and error handling here means future pages
- * can call the API consistently instead of each building its own
- * fetch logic.
+ * All frontend API calls use this module so error handling and the API
+ * base URL stay consistent across the application.
  */
+
 const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL ||
-  "http://localhost:5000/api/v1"
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1"
 ).replace(/\/+$/, "");
 
 /**
- * Make a JSON request and normalize common HTTP failures.
- *
- * Do not put secrets in this client: all VITE_ variables are bundled
- * into public browser code and can be inspected by site visitors.
+ * Send a request and return its parsed JSON response.
+ * Attach useful status information to errors for page-level handling.
  */
 async function request(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -33,10 +30,10 @@ async function request(path, options = {}) {
     ? await response.json()
     : null;
 
-  if (!response.ok) {
+  if (!response.ok || payload?.success === false) {
     const error = new Error(
       payload?.error?.message ||
-        `Request failed with status ${response.status}.`
+        `Request failed with status ${response.status}.`,
     );
 
     error.status = response.status;
@@ -48,16 +45,35 @@ async function request(path, options = {}) {
   return payload;
 }
 
-/**
- * Export feature-specific functions rather than exposing raw URLs
- * throughout the UI. This makes future API changes easier to maintain.
- */
 export const api = {
+  /** Existing backend health check. */
   getHealth() {
     return request("/health");
   },
 
+  /** Existing backend readiness check. */
   getReadiness() {
     return request("/health/ready");
+  },
+
+  /**
+   * Fetch published games from the database.
+   * The backend handles title/alias search, genre filtering and pagination.
+   */
+  getGames({ search = "", genre = "", page = 1, limit = 50 } = {}) {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+
+    if (search.trim()) params.set("search", search.trim());
+    if (genre.trim()) params.set("genre", genre.trim());
+
+    return request(`/games?${params.toString()}`);
+  },
+
+  /** Fetch one published game by its URL slug. */
+  getGame(slug) {
+    return request(`/games/${encodeURIComponent(slug)}`);
   },
 };

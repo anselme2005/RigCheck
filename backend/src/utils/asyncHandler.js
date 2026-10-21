@@ -11,3 +11,5 @@ export function asyncHandler(handler) {
     Promise.resolve(handler(req, res, next)).catch(next);
   };
 }
+
+export default asyncHandler;

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowDown,
@@ -14,7 +14,7 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 
-import { games } from "../data/games.js";
+import { api } from "../lib/api.js";    
 
 /**
  * Display the initial discovery artwork.
@@ -22,6 +22,37 @@ import { games } from "../data/games.js";
  * These simple CSS-based covers avoid relying on third-party image URLs.
  * We can add licensed or otherwise appropriately sourced game artwork later.
  */
+
+/**
+ * Adapt API game records to the presentation properties used by the
+ * existing game cards. These values affect artwork only, not compatibility.
+ */
+const artworkBySlug = {
+  "cyberpunk-2077": { initials: "2077", artworkTone: "amber" },
+  "elden-ring": { initials: "ER", artworkTone: "olive" },
+  "grand-theft-auto-v": { initials: "V", artworkTone: "green" },
+  "red-dead-redemption-2": { initials: "RDR2", artworkTone: "rust" },
+  "forza-horizon-5": { initials: "FH5", artworkTone: "blue" },
+  minecraft: { initials: "MC", artworkTone: "forest" },
+  valorant: { initials: "V", artworkTone: "red" },
+  "the-witcher-3-wild-hunt": { initials: "W3", artworkTone: "slate" },
+};
+
+function adaptGame(game) {
+  const artwork = artworkBySlug[game.slug] || {
+    initials: game.title.slice(0, 3).toUpperCase(),
+    artworkTone: "slate",
+  };
+
+  return {
+    ...game,
+    id: game.slug,
+    year: game.releaseYear ?? "Year unavailable",
+    genre: game.genre || "Unclassified",
+    description: game.description || "No description is available yet.",
+    ...artwork,
+  };
+}
 function GameArtwork({ game, compact = false }) {
   return (
     <div
@@ -78,35 +109,70 @@ function GameCard({ game }) {
 }
 
 const genres = [
-  "All games",
+   "All games",
+  "RPG",
   "Action RPG",
-  "Action-adventure",
+  "Action-Adventure",
   "Racing",
   "Sandbox",
-  "Tactical shooter",
+  "Tactical Shooter",
 ];
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedGenre, setSelectedGenre] = useState("All games");
+const [selectedGenre, setSelectedGenre] = useState("All games");
 
-  // Search by title or genre and apply the selected genre filter.
-  // useMemo avoids recalculating the list on unrelated state changes.
-  const filteredGames = useMemo(() => {
-    const normalizedQuery = searchQuery.trim().toLowerCase();
+const [games, setGames] = useState([]);
+const [loadingGames, setLoadingGames] = useState(true);
+const [gamesError, setGamesError] = useState("");
 
-    return games.filter((game) => {
-      const matchesSearch =
-        !normalizedQuery ||
-        game.title.toLowerCase().includes(normalizedQuery) ||
-        game.genre.toLowerCase().includes(normalizedQuery);
 
-      const matchesGenre =
-        selectedGenre === "All games" || game.genre === selectedGenre;
+useEffect(() => {
+  // Prevent an older request from updating the page after the search or selected genre has changed.
+  let cancelled = false;
 
-      return matchesSearch && matchesGenre;
-    });
-  }, [searchQuery, selectedGenre]);
+  // Wait briefly after typing before requesting the catalog.
+  const debounceTimer = setTimeout(async () => {
+    if (cancelled) return;
+
+    setLoadingGames(true);
+    setGamesError("");
+
+    try {
+      const result = await api.getGames({
+        search: searchQuery,
+        genre: selectedGenre === "All games" ? "" : selectedGenre,
+        page: 1,
+        limit: 50,
+      });
+
+      if (!cancelled) {
+        setGames((result.data || []).map(adaptGame));
+      }
+    } catch (error) {
+      if (!cancelled) {
+        setGames([]);
+        setGamesError(
+          error.message ||
+            "We couldn't load the game catalog. Please try again."
+        );
+      }
+    } finally {
+      if (!cancelled) {
+        setLoadingGames(false);
+      }
+    }
+  }, 300);
+
+  // Clear the timer and ignore results from obsolete requests.
+  return () => {
+    cancelled = true;
+    clearTimeout(debounceTimer);
+  };
+}, [searchQuery, selectedGenre]);
+
+
+const filteredGames = games;
 
   return (
     <>
@@ -244,9 +310,12 @@ export default function HomePage() {
               </div>
 
               <span className="catalog-count">
-                {filteredGames.length}{" "}
-                {filteredGames.length === 1 ? "game" : "games"}
-              </span>
+  {loadingGames
+    ? "Loading games..."
+    : `${filteredGames.length} ${
+        filteredGames.length === 1 ? "game" : "games"
+      }`}
+</span>
             </div>
 
             <div className="search-panel" id="game-search">
@@ -257,8 +326,8 @@ export default function HomePage() {
                   type="search"
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
-                  placeholder="Search by game title or genre..."
-                  aria-label="Search games by title or genre"
+                  placeholder="Search by game title or alias..."
+                  aria-label="Search games by title or alias"
                 />
 
                 {searchQuery && (
@@ -290,13 +359,34 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="game-grid" aria-live="polite">
-              {filteredGames.map((game) => (
-                <GameCard key={game.id} game={game} />
-              ))}
-            </div>
+            {gamesError ? (
+  <div className="empty-search" role="alert">
+    <span className="empty-search-icon">
+      <CircleHelp size={23} />
+    </span>
+    <h3>We couldn't load the game catalog</h3>
+    <p>{gamesError}</p>
+    <button
+      type="button"
+      className="button button-secondary"
+      onClick={() => window.location.reload()}
+    >
+      Try again
+    </button>
+  </div>
+) : loadingGames ? (
+  <div className="empty-search" role="status" aria-live="polite">
+    <p>Loading games from the RigCheck catalog...</p>
+  </div>
+) : (
+  <div className="game-grid" aria-live="polite">
+    {filteredGames.map((game) => (
+      <GameCard key={game.slug} game={game} />
+    ))}
+  </div>
+)}
 
-            {filteredGames.length === 0 && (
+            {!loadingGames && !gamesError && filteredGames.length === 0 && (
               <div className="empty-search">
                 <span className="empty-search-icon">
                   <Search size={23} />
@@ -425,8 +515,7 @@ export default function HomePage() {
           </Link>
 
           <p>
-            Clear answers for your next gaming decision. No guesswork presented
-            as certainty.
+            Clear answers for your next gaming decision.
           </p>
 
           <span className="footer-copyright">
